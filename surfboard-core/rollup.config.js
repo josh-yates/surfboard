@@ -31,11 +31,10 @@ function serve() {
 }
 
 export default {
-	input: 'src/main.ts',
+	input: 'src/surfboard-container.svelte',
 	output: {
-		sourcemap: true,
+		sourcemap: !production,
 		format: 'iife',
-		name: 'app',
 		file: 'public/build/bundle.js'
 	},
 	plugins: [
@@ -43,7 +42,8 @@ export default {
 			preprocess: sveltePreprocess({ sourceMap: !production }),
 			compilerOptions: {
 				// enable run-time checks when not in production
-				dev: !production
+				dev: !production,
+				customElement: true
 			}
 		}),
 		// we'll extract any component CSS out into
