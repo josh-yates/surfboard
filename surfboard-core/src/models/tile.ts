@@ -1,4 +1,4 @@
-import type { TileType } from "./tileType";
+import type { TileType } from './tileType';
 
 export class Tile {
     type: TileType;
