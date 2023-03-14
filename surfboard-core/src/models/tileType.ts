@@ -1,4 +1,1 @@
-export enum TileType {
-    Markdown,
-    Data
-}
+export type TileType = 'Markdown' | 'Data'

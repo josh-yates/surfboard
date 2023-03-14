@@ -1,0 +1,12 @@
+{
+    "tiles": [
+        {
+            "type": "Markdown",
+            "title": "Sample markdown tile",
+            "config": {
+                "text": "Sample text\r\nwith newlines",
+                "source": "/sometext.txt"
+            }
+        }
+    ]
+}

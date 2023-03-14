@@ -1,28 +1,44 @@
 import type { ILogger } from '../models/iLogger';
+import { LogLevel } from '../models/logLevels';
 
 export class LogService implements ILogger {
     private _loggers: ILogger[] = [];
+    private _logLevel: LogLevel;
 
-    constructor(disableDefaultLogging = false) {
+    constructor(logLevel: LogLevel, disableDefaultLogging = false) {
         if (!disableDefaultLogging) {
             this.addLogger(defaultLogger);
         }
+
+        if (logLevel === null || logLevel === undefined) {
+            throw new Error(`Invalid log level '${logLevel}'`);
+        }
+
+        this._logLevel = logLevel;
     }
 
     public writeDebug(message: string, data?: any): void {
-        this._loggers.forEach(l => l.writeDebug(`SURFBOARD_DEBUG: ${message}`, data));
+        if (this._logLevel <= LogLevel.Debug) {
+            this._loggers.forEach(l => l.writeDebug(`SURFBOARD_DEBUG: ${message}`, data));
+        }
     }
 
     public writeInformation(message: string, data?: any): void {
-        this._loggers.forEach(l => l.writeInformation(`SURFBOARD_INFO: ${message}`, data));
+        if (this._logLevel <= LogLevel.Info) {
+            this._loggers.forEach(l => l.writeInformation(`SURFBOARD_INFO: ${message}`, data));
+        }
     }
 
     public writeWarning(message: string, data?: any): void {
-        this._loggers.forEach(l => l.writeWarning(`SURFBOARD_WARN: ${message}`, data));
+        if (this._logLevel <= LogLevel.Warn) {
+            this._loggers.forEach(l => l.writeWarning(`SURFBOARD_WARN: ${message}`, data));
+        }
     }
 
-    public writeError(message: string, error?: Error, data?: any): void {
-        this._loggers.forEach(l => l.writeError(`SURFBOARD_ERROR: ${message}`, data));
+    public writeError(message: string, data?: any): void {
+        if (this._logLevel <= LogLevel.Error) {
+            this._loggers.forEach(l => l.writeError(`SURFBOARD_ERROR: ${message}`, data));
+        }
     }
 
     public addLogger(logger: ILogger) {
@@ -54,13 +70,11 @@ const defaultLogger: ILogger = {
             console.warn(message);
         }
     },
-    writeError(message, error?, data?) {
+    writeError(message, data?) {
         if (data !== null && data !== undefined) {
             console.error(message, data);
         } else {
             console.error(message);
         }
-
-        if (!!error) console.error(error);
     }
 }
